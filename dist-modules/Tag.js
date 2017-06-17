@@ -85,10 +85,6 @@ var dropCollect = function dropCollect(connect, monitor) {
 };
 
 function RemoveComponent(props) {
-  if (props.readOnly) {
-    return _react2.default.createElement("span", null);
-  }
-
   if (props.removeComponent) {
     var _Component = props.removeComponent;
     return _react2.default.createElement(_Component, props);
