@@ -119,6 +119,10 @@ var ReactTags = function (_Component) {
         return this.props.handleFilterSuggestions(query, suggestions);
       }
 
+      if (query.length === 0 && this.props.predefinedSuggestions) {
+        return this.props.predefinedSuggestions;
+      }
+
       return suggestions.filter(function (item) {
         return item.toLowerCase().indexOf(query.toLowerCase()) === 0;
       });
@@ -137,7 +141,7 @@ var ReactTags = function (_Component) {
     value: function handleDelete(i, e) {
       this.props.handleDelete(i);
       this.setState({ query: "" });
-      this.resetAndFocusInput();
+      setTimeout(this.resetAndFocusInput, 0);
     }
   }, {
     key: "handleChange",
@@ -168,6 +172,8 @@ var ReactTags = function (_Component) {
         this.props.handleInputBlur(value);
         this.textInput.value = "";
       }
+
+      this.setState({ isFocused: false, suggestions: this.props.suggestions });
     }
   }, {
     key: "handleFocus",
@@ -176,6 +182,10 @@ var ReactTags = function (_Component) {
         var value = e.target.value.trim();
         this.props.handleInputFocus(value);
       }
+
+      var suggestions = this.filteredSuggestions(this.state.query, this.props.suggestions);
+
+      this.setState({ isFocused: true, suggestions: suggestions });
     }
   }, {
     key: "handleKeyDown",
@@ -371,11 +381,12 @@ var ReactTags = function (_Component) {
         _react2.default.createElement(_Suggestions2.default, {
           query: query,
           suggestions: suggestions,
+          showPredefined: this.state.isFocused && this.props.minQueryLength === 0,
           selectedIndex: selectedIndex,
           handleClick: this.handleSuggestionClick,
           handleHover: this.handleSuggestionHover,
           minQueryLength: this.props.minQueryLength,
-          shouldRenderSuggestions: this.props.shouldRenderSuggestions,
+          shouldRenderSuggestions: this.shouldRenderSuggestions,
           classNames: this.state.classNames
         })
       ) : null;
@@ -401,6 +412,7 @@ ReactTags.PropTypes = {
   placeholder: _propTypes2.default.string,
   labelField: _propTypes2.default.string,
   suggestions: _propTypes2.default.array,
+  predefinedSuggestions: _propTypes2.default.array,
   delimiters: _propTypes2.default.array,
   autofocus: _propTypes2.default.bool,
   inline: _propTypes2.default.bool,

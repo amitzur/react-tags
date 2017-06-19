@@ -55,7 +55,7 @@ var Suggestions = function (_Component) {
           props = _this2.props;
 
       var shouldRenderSuggestions = props.shouldRenderSuggestions || _this.shouldRenderSuggestions;
-      return !(0, _isEqual2.default)(props.suggestions, nextProps.suggestions) || shouldRenderSuggestions(nextProps.query) || shouldRenderSuggestions(nextProps.query) != shouldRenderSuggestions(props.query);
+      return !(0, _isEqual2.default)(props.suggestions, nextProps.suggestions) || shouldRenderSuggestions(nextProps.query, nextProps.showPredefined) || shouldRenderSuggestions(nextProps.query, nextProps.showPredefined) != shouldRenderSuggestions(props.query, props.showPredefined);
     }, _this.componentDidUpdate = function (prevProps) {
       var suggestionsContainer = _this.refs.suggestionsContainer;
       var _this$props = _this.props,
@@ -75,12 +75,21 @@ var Suggestions = function (_Component) {
       return {
         __html: input.replace(RegExp(escapedRegex, "gi"), "<mark>$&</mark>")
       };
-    }, _this.shouldRenderSuggestions = function (query) {
+    }, _this.shouldRenderSuggestions = function (query, showPredefined) {
       var _this3 = _this,
           props = _this3.props;
 
-      var minQueryLength = props.minQueryLength || 2;
-      return query.length >= minQueryLength;
+      var minQueryLength = typeof props.minQueryLength === 'number' ? props.minQueryLength : 2;
+
+      if (minQueryLength === 0) {
+        if (query.length === 0) {
+          return showPredefined;
+        } else {
+          return false;
+        }
+      }
+
+      return query.length >= minQueryLength || props.showPredefined;
     }, _this.render = function () {
       var _this4 = _this,
           props = _this4.props;
@@ -99,7 +108,7 @@ var Suggestions = function (_Component) {
 
       // use the override, if provided
       var shouldRenderSuggestions = props.shouldRenderSuggestions || _this.shouldRenderSuggestions;
-      if (suggestions.length === 0 || !shouldRenderSuggestions(props.query)) {
+      if (suggestions.length === 0 || !shouldRenderSuggestions(props.query, props.showPredefined)) {
         return null;
       }
 
@@ -130,6 +139,7 @@ Suggestions.propTypes = {
   handleHover: _propTypes2.default.func.isRequired,
   minQueryLength: _propTypes2.default.number,
   shouldRenderSuggestions: _propTypes2.default.func,
-  classNames: _propTypes2.default.object
+  classNames: _propTypes2.default.object,
+  showPredefined: _propTypes2.default.bool
 };
 exports.default = Suggestions;
