@@ -77,6 +77,7 @@ var ReactTags = function (_Component) {
     };
 
     _this.handleBlur = _this.handleBlur.bind(_this);
+    _this.handleFocus = _this.handleFocus.bind(_this);
     _this.handleKeyDown = _this.handleKeyDown.bind(_this);
     _this.handleChange = _this.handleChange.bind(_this);
     _this.moveTag = _this.moveTag.bind(_this);
@@ -162,10 +163,18 @@ var ReactTags = function (_Component) {
   }, {
     key: "handleBlur",
     value: function handleBlur(e) {
-      var value = e.target.value.trim();
       if (this.props.handleInputBlur) {
+        var value = e.target.value.trim();
         this.props.handleInputBlur(value);
         this.textInput.value = "";
+      }
+    }
+  }, {
+    key: "handleFocus",
+    value: function handleFocus(e) {
+      if (this.props.handleInputFocus) {
+        var value = e.target.value.trim();
+        this.props.handleInputFocus(value);
       }
     }
   }, {
@@ -351,6 +360,7 @@ var ReactTags = function (_Component) {
           placeholder: placeholder,
           "aria-label": placeholder,
           onBlur: this.handleBlur,
+          onFocus: this.handleFocus,
           onChange: this.handleChange,
           onKeyDown: this.handleKeyDown,
           onPaste: this.handlePaste,
@@ -401,6 +411,7 @@ ReactTags.PropTypes = {
   allowDeleteFromEmptyInput: _propTypes2.default.bool,
   handleInputChange: _propTypes2.default.func,
   handleInputBlur: _propTypes2.default.func,
+  handleInputFocus: _propTypes2.default.func,
   minQueryLength: _propTypes2.default.number,
   shouldRenderSuggestions: _propTypes2.default.func,
   removeComponent: _propTypes2.default.func,
