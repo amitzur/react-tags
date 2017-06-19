@@ -353,10 +353,12 @@ var ReactTags = function (_Component) {
       var query = this.state.query.trim(),
           selectedIndex = this.state.selectedIndex,
           suggestions = this.state.suggestions,
+          isFocused = this.state.isFocused,
           placeholder = this.props.placeholder,
           inputName = this.props.name,
           inputId = this.props.id,
-          maxLength = this.props.maxLength;
+          maxLength = this.props.maxLength,
+          predefinedSuggestions = this.props.predefinedSuggestions;
 
       var tagInput = !this.props.readOnly ? _react2.default.createElement(
         "div",
@@ -381,7 +383,7 @@ var ReactTags = function (_Component) {
         _react2.default.createElement(_Suggestions2.default, {
           query: query,
           suggestions: suggestions,
-          showPredefined: this.state.isFocused && this.props.minQueryLength === 0,
+          showPredefined: isFocused && predefinedSuggestions && query.length === 0,
           selectedIndex: selectedIndex,
           handleClick: this.handleSuggestionClick,
           handleHover: this.handleSuggestionHover,

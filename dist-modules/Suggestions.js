@@ -81,15 +81,11 @@ var Suggestions = function (_Component) {
 
       var minQueryLength = typeof props.minQueryLength === 'number' ? props.minQueryLength : 2;
 
-      if (minQueryLength === 0) {
-        if (query.length === 0) {
-          return showPredefined;
-        } else {
-          return false;
-        }
+      if (query.length === 0) {
+        return showPredefined;
       }
 
-      return query.length >= minQueryLength || props.showPredefined;
+      return query.length >= minQueryLength;
     }, _this.render = function () {
       var _this4 = _this,
           props = _this4.props;
